@@ -29,9 +29,25 @@ namespace VideoQuiz.Controllers
         }
 
 
-        // GET api/Trivia/:id
+        [Route ("api/question/{questionId}")]
+        [ResponseType(typeof(List<QuestionOption>))]
+        public IHttpActionResult GetQuestionOption(int questionId)
+        {
+            var userid = User.Identity.Name;
+
+            var questionOptions = this.GetOptionsFromQuestion(questionId);
+
+            if (questionOptions == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(questionOptions);
+        }
+
+
         [Route ("api/quiz/{quizId}")]
-        [ResponseType(typeof(Question))]
+        [ResponseType(typeof(List<Question>))]
         public IHttpActionResult Get(int quizId)
         {
             var userid = User.Identity.Name;
@@ -93,6 +109,27 @@ namespace VideoQuiz.Controllers
                 }
 
                 return questionList;
+            }
+        }
+
+
+        private List<QuestionOption> GetOptionsFromQuestion(int questionId)
+        {
+            List<QuestionOption> optionList = new List<QuestionOption>();
+
+            using (VideoQuiz.Models.DBEntityContainer test = new VideoQuiz.Models.DBEntityContainer())
+            {
+                var result = test.QZ_GetAnswer_MCH(questionId).ToList();
+
+                foreach (var item in result.ToList())
+                {
+                    optionList.Add(new QuestionOption { Id = item.ID, 
+                                                        QuestionId = item.QuestionID, 
+                                                        Title = item.AnswerText,
+                                                        Order = item.OptionOrder});
+                }
+
+                return optionList;
             }
         }
 

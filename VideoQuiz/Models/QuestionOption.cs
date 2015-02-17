@@ -5,11 +5,11 @@ using System.Web;
 
 namespace GeekQuiz.Models
 {
-    public class Question
+    public class QuestionOption
     {
+        public int Id { get; set; }
         public int QuestionId { get; set; }
-        public int TypeId {get; set;}
         public string Title { get; set; }
-        public IEnumerable<QuestionOption> options { get; set; }
+        public int? Order { get; set; }
     }
 }

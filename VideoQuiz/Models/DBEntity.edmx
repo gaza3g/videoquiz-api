@@ -8,6 +8,9 @@
         <Function Name="QZ_GetAllSectionsQuestionsForVideoQuiz" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="quizID" Type="int" Mode="In" />
         </Function>
+        <Function Name="QZ_GetAnswer_MCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="questionID" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="DBEntityStoreContainer" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -15,7 +18,10 @@
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBEntity" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="DBEntityContainer" annotation:LazyLoadingEnabled="true">
           <FunctionImport Name="QZ_GetAllSectionsQuestionsForVideoQuiz" ReturnType="Collection(DBEntity.QZ_GetAllSectionsQuestionsForVideoQuiz_Result)">
-            <Parameter Name="quizID" Mode="In" Type="Int32" />
+          <Parameter Name="quizID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="QZ_GetAnswer_MCH" ReturnType="Collection(DBEntity.QZ_GetAnswer_MCH_Result)">
+            <Parameter Name="questionID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="QZ_GetAllSectionsQuestionsForThisQuiz_Result">
@@ -46,6 +52,17 @@
           <Property Type="Int32" Name="TypeID" Nullable="false" />
           <Property Type="String" Name="Question" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="QZ_GetAnswer_MCH_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="QuestionID" Nullable="false" />
+          <Property Type="String" Name="AnswerText" Nullable="true" />
+          <Property Type="Boolean" Name="IsAnswer" Nullable="false" />
+          <Property Type="Boolean" Name="IsAnswerLastMarked" Nullable="true" />
+          <Property Type="Double" Name="Score" Nullable="false" />
+          <Property Type="Double" Name="ScoreLastMarked" Nullable="true" />
+          <Property Type="Int32" Name="OptionOrder" Nullable="true" />
+          <Property Type="String" Name="Feedback" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -60,6 +77,21 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="QZ_GetAnswer_MCH" FunctionName="DBEntity.Store.QZ_GetAnswer_MCH">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBEntity.QZ_GetAnswer_MCH_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
+                <ScalarProperty Name="IsAnswer" ColumnName="IsAnswer" />
+                <ScalarProperty Name="IsAnswerLastMarked" ColumnName="IsAnswerLastMarked" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="ScoreLastMarked" ColumnName="ScoreLastMarked" />
+                <ScalarProperty Name="OptionOrder" ColumnName="OptionOrder" />
+                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

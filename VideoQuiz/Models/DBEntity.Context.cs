@@ -36,5 +36,14 @@ namespace VideoQuiz.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAllSectionsQuestionsForVideoQuiz_Result>("QZ_GetAllSectionsQuestionsForVideoQuiz", quizIDParameter);
         }
+    
+        public virtual ObjectResult<QZ_GetAnswer_MCH_Result> QZ_GetAnswer_MCH(Nullable<int> questionID)
+        {
+            var questionIDParameter = questionID.HasValue ?
+                new ObjectParameter("questionID", questionID) :
+                new ObjectParameter("questionID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAnswer_MCH_Result>("QZ_GetAnswer_MCH", questionIDParameter);
+        }
     }
 }
