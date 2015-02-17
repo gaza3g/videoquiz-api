@@ -28,13 +28,13 @@ namespace VideoQuiz.Models
         }
     
     
-        public virtual ObjectResult<QZ_GetAllSectionsQuestionsForThisQuiz_Result> QZ_GetAllSectionsQuestionsForThisQuiz(Nullable<int> quizID)
+        public virtual ObjectResult<QZ_GetAllSectionsQuestionsForVideoQuiz_Result> QZ_GetAllSectionsQuestionsForVideoQuiz(Nullable<int> quizID)
         {
             var quizIDParameter = quizID.HasValue ?
                 new ObjectParameter("quizID", quizID) :
                 new ObjectParameter("quizID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAllSectionsQuestionsForThisQuiz_Result>("QZ_GetAllSectionsQuestionsForThisQuiz", quizIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAllSectionsQuestionsForVideoQuiz_Result>("QZ_GetAllSectionsQuestionsForVideoQuiz", quizIDParameter);
         }
     }
 }

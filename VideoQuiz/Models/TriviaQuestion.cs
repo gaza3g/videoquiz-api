@@ -16,4 +16,6 @@ namespace GeekQuiz.Models
 
         public virtual List<TriviaOption> Options { get; set; }
     }
+
+    
 }

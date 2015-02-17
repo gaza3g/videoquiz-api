@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -29,19 +30,20 @@ namespace VideoQuiz.Controllers
 
 
         // GET api/Trivia/:id
-        [ResponseType(typeof(TriviaQuestion))]
-        public async Task<IHttpActionResult> Get(int questionId)
+        [Route ("api/quiz/{quizId}")]
+        [ResponseType(typeof(Question))]
+        public IHttpActionResult Get(int quizId)
         {
             var userid = User.Identity.Name;
 
-            TriviaQuestion question = await this.GetQuestionAsync(questionId);
+            var questions = this.GetAllQuestionsFromQuiz(quizId);
 
-            if (question == null)
+            if (questions == null)
             {
                 return this.NotFound();
             }
 
-            return this.Ok(question);
+            return this.Ok(questions);
         }
 
         // GET api/Trivia
@@ -74,6 +76,26 @@ namespace VideoQuiz.Controllers
             var isCorrect = await this.StoreAsync(answer);
             return this.Ok<bool>(isCorrect);
         }
+
+        private List<Question> GetAllQuestionsFromQuiz(int quizId)
+        {
+            List<Question> questionList = new List<Question>();
+
+            using (VideoQuiz.Models.DBEntityContainer test = new VideoQuiz.Models.DBEntityContainer())
+            {
+                var result = test.QZ_GetAllSectionsQuestionsForVideoQuiz(quizId).ToList();
+
+                foreach (var item in result.ToList())
+                {
+                    questionList.Add(new Question { QuestionId = item.ID, 
+                                                    TypeId = item.TypeID, 
+                                                    Title = item.Question });
+                }
+
+                return questionList;
+            }
+        }
+
 
 
         private async Task<TriviaQuestion> GetQuestionAsync(int questionId)
