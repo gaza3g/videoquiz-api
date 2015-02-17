@@ -5,11 +5,11 @@ using System.Web;
 
 namespace VideoQuiz.Models
 {
-    public class QuestionOption
+    public class VideoQuizRequest
     {
         public int Id { get; set; }
-        public int QuestionId { get; set; }
         public string Title { get; set; }
-        public int? Order { get; set; }
+        public string VideoUrl { get; set; }
+        public IEnumerable<Question> Questions { get; set; }
     }
 }

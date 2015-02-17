@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace GeekQuiz.Models
+namespace VideoQuiz.Models
 {
     public class Question
     {
         public int QuestionId { get; set; }
         public int TypeId {get; set;}
         public string Title { get; set; }
-        public IEnumerable<QuestionOption> options { get; set; }
+        public IEnumerable<QuestionOption> Options { get; set; }
     }
 }
