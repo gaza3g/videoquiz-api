@@ -35,6 +35,7 @@ namespace VideoQuiz.Controllers
         }
 
         [Route("api/quiz/{quizId}")]
+        [HttpGet, HttpOptions]
         public IHttpActionResult Get(int quizId)
         {
             var db_questions = this.GetAllQuestionsFromQuiz(quizId);
