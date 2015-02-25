@@ -204,6 +204,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\QuestionContainer.cs" />
     <Compile Include="Models\QuestionOption.cs" />
     <Compile Include="Models\QZ_GetAllSectionsQuestionsForThisQuiz_Result.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
