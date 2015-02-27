@@ -8,7 +8,7 @@ namespace VideoQuiz.Models
 {
     public class QuestionOption
     {
-        [JsonIgnore]
+        [JsonProperty("optionid")]
         public int Id { get; set; }
 
         [JsonIgnore]

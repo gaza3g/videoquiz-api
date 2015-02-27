@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using VideoQuiz.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace VideoQuiz.Controllers
 {
@@ -19,6 +20,27 @@ namespace VideoQuiz.Controllers
     /// </summary>
     public class QuizController : ApiController
     {
+        public class QuestionResponse
+        {
+            public string QuizId { get; set; }
+            public string QuestionId { get; set; }
+            public string OptionId { get; set; }
+            public string OptionText { get; set; }
+        }
+
+        [Route("api/quiz/response")]
+        [HttpPost, HttpOptions]
+        public IHttpActionResult Post([FromBody] QuestionResponse response)
+        {
+            if (this.Request.Method == HttpMethod.Post)
+            {
+                // Do something with it, for e.g store in DB
+                return this.Ok(response);
+            }
+
+            return this.Ok();
+        }
+
         [Route("api/quiz/{quizId}")]
         [HttpGet, HttpOptions]
         public IHttpActionResult Get(int quizId)
