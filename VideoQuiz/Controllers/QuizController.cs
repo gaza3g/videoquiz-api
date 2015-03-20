@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using VideoQuiz.Models;
 using Newtonsoft.Json;
@@ -18,6 +19,7 @@ namespace VideoQuiz.Controllers
     /// <summary>
     /// Returns the questions that are associated with a particular quiz.
     /// </summary>
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class QuizController : ApiController
     {
         public class QuestionResponse
@@ -28,7 +30,7 @@ namespace VideoQuiz.Controllers
             public string OptionText { get; set; }
         }
 
-        [Route("api/quiz/response")]
+        [Route("quiz/response")]
         [HttpPost, HttpOptions]
         public IHttpActionResult Post([FromBody] QuestionResponse response)
         {
@@ -41,7 +43,7 @@ namespace VideoQuiz.Controllers
             return this.Ok();
         }
 
-        [Route("api/quiz/{quizId}")]
+        [Route("quiz/{quizId}")]
         [HttpGet, HttpOptions]
         public IHttpActionResult Get(int quizId)
         {

@@ -10,6 +10,8 @@ namespace VideoQuiz
     {
         public static void Register(HttpConfiguration config)
         {
+            config.EnableCors();
+
             // Web API configuration and services
 
             // Use camel case for JSON data
