@@ -11,6 +11,9 @@
         <Function Name="QZ_GetAnswer_MCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="questionID" Type="int" Mode="In" />
         </Function>
+        <Function Name="QZ_Video_GetCuepointsByQuizId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="quizID" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="DBEntityStoreContainer" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -21,7 +24,10 @@
           <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="QZ_GetAnswer_MCH" ReturnType="Collection(DBEntity.QZ_GetAnswer_MCH_Result)">
-            <Parameter Name="questionID" Mode="In" Type="Int32" />
+          <Parameter Name="questionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="QZ_Video_GetCuepointsByQuizId" ReturnType="Collection(DBEntity.QZ_Video_GetCuepointsByQuizId_Result)">
+            <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="QZ_GetAllSectionsQuestionsForThisQuiz_Result">
@@ -63,6 +69,11 @@
           <Property Type="Int32" Name="OptionOrder" Nullable="true" />
           <Property Type="String" Name="Feedback" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="QZ_Video_GetCuepointsByQuizId_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="QuestionID" Nullable="false" />
+          <Property Type="Int32" Name="QuePoint" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -95,6 +106,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="QZ_Video_GetCuepointsByQuizId" FunctionName="DBEntity.Store.QZ_Video_GetCuepointsByQuizId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBEntity.QZ_Video_GetCuepointsByQuizId_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuePoint" ColumnName="QuePoint" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -109,9 +129,9 @@
     <edmx:Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>

@@ -49,9 +49,12 @@ namespace VideoQuiz.Controllers
         {
             var db_questions = this.GetAllQuestionsFromQuiz(quizId);
 
+            DBEntityContainer db = new DBEntityContainer();
+
+            var cuepoints = db.QZ_Video_GetCuepointsByQuizId(quizId).ToList();
+
             List<QuestionContainer> questions = new List<QuestionContainer>();
 
-            int time = 3;
 
             foreach(Question q in db_questions)
             {
@@ -60,12 +63,14 @@ namespace VideoQuiz.Controllers
                 if (q.Options.Count() == 0) 
                     continue;
 
-                questions.Add(new QuestionContainer { time = time, question = new List<Question>{q} });
+                int cuepoint = cuepoints.Where(x => x.QuestionID == q.QuestionId).Select(x => x.QuePoint).SingleOrDefault();
 
-                time += 3;
+                questions.Add(new QuestionContainer { time = cuepoint, question = new List<Question>{q} });
 
             }
 
+
+            db.Dispose();
 
             if (questions == null)
             {
@@ -75,6 +80,7 @@ namespace VideoQuiz.Controllers
             return this.Ok(questions);
 
         }
+
 
         /// <summary>
         /// Call GetAllSectionsQuestionsForVideoQuiz stored proc and populate a list of Question
