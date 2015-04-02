@@ -27,6 +27,7 @@ namespace VideoQuiz.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<QZVideoQuizAttachement> QZVideoQuizAttachement { get; set; }
     
         public virtual int QZ_GetAllSectionsQuestionsForVideoQuiz(Nullable<int> quizID)
         {

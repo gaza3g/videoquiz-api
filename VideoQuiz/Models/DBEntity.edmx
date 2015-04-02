@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DBEntity.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBEntity.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="QZVideoQuizAttachement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuizID" Type="int" Nullable="false" />
+          <Property Name="LOID" Type="int" Nullable="false" />
+        </EntityType>
         <Function Name="QZ_GetAnswer_MCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="questionID" Type="int" Mode="In" />
         </Function>
@@ -14,7 +22,9 @@
         <Function Name="QZ_Video_GetQuePointsByQuizId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="quizID" Type="int" Mode="In" />
         </Function>
-        <EntityContainer Name="DBEntityStoreContainer" />
+        <EntityContainer Name="DBEntityStoreContainer">
+          <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -33,8 +43,9 @@
           <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="QZ_Video_GetQuePointsByQuizId" ReturnType="Collection(DBEntity.QZ_Video_GetQuePointsByQuizId_Result)">
-            <Parameter Name="quizID" Mode="In" Type="Int32" />
+          <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="QZVideoQuizAttachement" EntityType="DBEntity.QZVideoQuizAttachement" />
         </EntityContainer>
         <ComplexType Name="QZ_GetAnswer_MCH_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -57,6 +68,14 @@
           <Property Type="Int32" Name="QuestionID" Nullable="false" />
           <Property Type="Int32" Name="QuePoint" Nullable="false" />
         </ComplexType>
+        <EntityType Name="QZVideoQuizAttachement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuizID" Type="Int32" Nullable="false" />
+          <Property Name="LOID" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -98,6 +117,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="QZVideoQuizAttachement">
+            <EntityTypeMapping TypeName="DBEntity.QZVideoQuizAttachement">
+              <MappingFragment StoreEntitySet="QZVideoQuizAttachement">
+                <ScalarProperty Name="LOID" ColumnName="LOID" />
+                <ScalarProperty Name="QuizID" ColumnName="QuizID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -114,7 +142,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
