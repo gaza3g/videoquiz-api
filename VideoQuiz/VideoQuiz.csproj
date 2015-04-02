@@ -206,16 +206,13 @@
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionContainer.cs" />
     <Compile Include="Models\QuestionOption.cs" />
-    <Compile Include="Models\QZ_GetAllSectionsQuestionsForThisQuiz_Result.cs">
-      <DependentUpon>DBEntity.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\QZ_GetAllSectionsQuestionsForVideoQuiz_Result.cs">
-      <DependentUpon>DBEntity.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\QZ_GetAnswer_MCH_Result.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QZ_Video_GetCuepointsByQuizId_Result.cs">
+    <Compile Include="Models\QZ_Video_GetAllSectionsQuestions_Result.cs">
+      <DependentUpon>DBEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QZ_Video_GetQuePointsByQuizId_Result.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VideoQuizRequest.cs" />
@@ -266,7 +263,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

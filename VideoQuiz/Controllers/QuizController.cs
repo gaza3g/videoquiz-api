@@ -51,7 +51,7 @@ namespace VideoQuiz.Controllers
 
             DBEntityContainer db = new DBEntityContainer();
 
-            var cuepoints = db.QZ_Video_GetCuepointsByQuizId(quizId).ToList();
+            var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
 
             List<QuestionContainer> questions = new List<QuestionContainer>();
 
@@ -94,7 +94,7 @@ namespace VideoQuiz.Controllers
 
             using (DBEntityContainer db = new DBEntityContainer())
             {
-                var result = db.QZ_GetAllSectionsQuestionsForVideoQuiz(quizId).ToList();
+                var result = db.QZ_Video_GetAllSectionsQuestions(quizId).ToList();
 
                 foreach (var item in result.ToList())
                 {

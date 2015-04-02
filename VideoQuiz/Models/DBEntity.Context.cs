@@ -28,13 +28,13 @@ namespace VideoQuiz.Models
         }
     
     
-        public virtual ObjectResult<QZ_GetAllSectionsQuestionsForVideoQuiz_Result> QZ_GetAllSectionsQuestionsForVideoQuiz(Nullable<int> quizID)
+        public virtual int QZ_GetAllSectionsQuestionsForVideoQuiz(Nullable<int> quizID)
         {
             var quizIDParameter = quizID.HasValue ?
                 new ObjectParameter("quizID", quizID) :
                 new ObjectParameter("quizID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAllSectionsQuestionsForVideoQuiz_Result>("QZ_GetAllSectionsQuestionsForVideoQuiz", quizIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QZ_GetAllSectionsQuestionsForVideoQuiz", quizIDParameter);
         }
     
         public virtual ObjectResult<QZ_GetAnswer_MCH_Result> QZ_GetAnswer_MCH(Nullable<int> questionID)
@@ -46,13 +46,31 @@ namespace VideoQuiz.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAnswer_MCH_Result>("QZ_GetAnswer_MCH", questionIDParameter);
         }
     
-        public virtual ObjectResult<QZ_Video_GetCuepointsByQuizId_Result> QZ_Video_GetCuepointsByQuizId(Nullable<int> quizID)
+        public virtual int QZ_Video_GetCuepointsByQuizId(Nullable<int> quizID)
         {
             var quizIDParameter = quizID.HasValue ?
                 new ObjectParameter("quizID", quizID) :
                 new ObjectParameter("quizID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_Video_GetCuepointsByQuizId_Result>("QZ_Video_GetCuepointsByQuizId", quizIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QZ_Video_GetCuepointsByQuizId", quizIDParameter);
+        }
+    
+        public virtual ObjectResult<QZ_Video_GetAllSectionsQuestions_Result> QZ_Video_GetAllSectionsQuestions(Nullable<int> quizID)
+        {
+            var quizIDParameter = quizID.HasValue ?
+                new ObjectParameter("quizID", quizID) :
+                new ObjectParameter("quizID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_Video_GetAllSectionsQuestions_Result>("QZ_Video_GetAllSectionsQuestions", quizIDParameter);
+        }
+    
+        public virtual ObjectResult<QZ_Video_GetQuePointsByQuizId_Result> QZ_Video_GetQuePointsByQuizId(Nullable<int> quizID)
+        {
+            var quizIDParameter = quizID.HasValue ?
+                new ObjectParameter("quizID", quizID) :
+                new ObjectParameter("quizID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_Video_GetQuePointsByQuizId_Result>("QZ_Video_GetQuePointsByQuizId", quizIDParameter);
         }
     }
 }
