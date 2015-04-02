@@ -124,23 +124,15 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        [Route("quiz/{quizId}/loid")]
-        [HttpGet, HttpOptions]
-        public IHttpActionResult GetLOID(int quizId)
+        public int GetLOID(int quizId)
         {
             DBEntityContainer db = new DBEntityContainer();
 
             int loId = db.QZVideoQuizAttachement.Where(q => q.QuizID == quizId).SingleOrDefault().LOID;
 
-
             db.Dispose();
 
-            if (loId == 0)
-            {
-                return this.NotFound();
-            }
-
-            return this.Ok(loId);
+            return loId;
 
         }
 
