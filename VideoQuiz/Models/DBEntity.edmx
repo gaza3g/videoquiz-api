@@ -5,6 +5,28 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DBEntity.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="LOResource">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VirtualFolderID" Type="int" />
+          <Property Name="FilePhysicalFolderFUID" Type="uniqueidentifier" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="10" />
+          <Property Name="ToolType" Type="nvarchar" MaxLength="100" />
+          <Property Name="Url" Type="nvarchar(max)" />
+          <Property Name="FileUploadType" Type="nvarchar" MaxLength="250" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="250" />
+          <Property Name="FileType" Type="nvarchar" MaxLength="50" />
+          <Property Name="FileMimeType" Type="nvarchar(max)" />
+          <Property Name="Filesize" Type="nvarchar" MaxLength="10" />
+          <Property Name="CreatedByPUID" Type="uniqueidentifier" />
+          <Property Name="ModifidedByPUID" Type="uniqueidentifier" />
+          <Property Name="DateTimeCreated" Type="datetime" />
+          <Property Name="DateTimeModified" Type="datetime" />
+        </EntityType>
         <EntityType Name="QZVideoQuizAttachement">
           <Key>
             <PropertyRef Name="ID" />
@@ -23,6 +45,7 @@
           <Parameter Name="quizID" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="DBEntityStoreContainer">
+          <EntitySet Name="LOResource" EntityType="Self.LOResource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -46,6 +69,7 @@
           <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="QZVideoQuizAttachement" EntityType="DBEntity.QZVideoQuizAttachement" />
+          <EntitySet Name="LOResource" EntityType="DBEntity.LOResource" />
         </EntityContainer>
         <ComplexType Name="QZ_GetAnswer_MCH_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -75,6 +99,28 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuizID" Type="Int32" Nullable="false" />
           <Property Name="LOID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LOResource">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VirtualFolderID" Type="Int32" />
+          <Property Name="FilePhysicalFolderFUID" Type="Guid" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ToolType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileUploadType" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="FileType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileMimeType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Filesize" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedByPUID" Type="Guid" />
+          <Property Name="ModifidedByPUID" Type="Guid" />
+          <Property Name="DateTimeCreated" Type="DateTime" Precision="3" />
+          <Property Name="DateTimeModified" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -122,6 +168,29 @@
               <MappingFragment StoreEntitySet="QZVideoQuizAttachement">
                 <ScalarProperty Name="LOID" ColumnName="LOID" />
                 <ScalarProperty Name="QuizID" ColumnName="QuizID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOResource">
+            <EntityTypeMapping TypeName="DBEntity.LOResource">
+              <MappingFragment StoreEntitySet="LOResource">
+                <ScalarProperty Name="DateTimeModified" ColumnName="DateTimeModified" />
+                <ScalarProperty Name="DateTimeCreated" ColumnName="DateTimeCreated" />
+                <ScalarProperty Name="ModifidedByPUID" ColumnName="ModifidedByPUID" />
+                <ScalarProperty Name="CreatedByPUID" ColumnName="CreatedByPUID" />
+                <ScalarProperty Name="Filesize" ColumnName="Filesize" />
+                <ScalarProperty Name="FileMimeType" ColumnName="FileMimeType" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileUploadType" ColumnName="FileUploadType" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="ToolType" ColumnName="ToolType" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="FilePhysicalFolderFUID" ColumnName="FilePhysicalFolderFUID" />
+                <ScalarProperty Name="VirtualFolderID" ColumnName="VirtualFolderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

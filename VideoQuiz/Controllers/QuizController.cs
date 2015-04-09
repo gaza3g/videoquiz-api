@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
@@ -41,6 +42,40 @@ namespace VideoQuiz.Controllers
             }
 
             return this.Ok();
+        }
+
+
+        /// <summary>
+        /// Self explanatory. Form video URL by joining columns from the LOResource table.
+        /// </summary>
+        /// <param name="quizId"></param>
+        /// <returns></returns>
+        [Route("quiz/{quizId}/video")]
+        [HttpGet, HttpOptions]
+        public IHttpActionResult GetVideoUrl(int quizId)
+        {
+            int loId = GetLOID(quizId);
+
+            DBEntityContainer db = new DBEntityContainer();
+
+            var lo = db.LOResource.Where(l => l.ID == loId).SingleOrDefault();
+            Uri baseUri = new Uri(Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, String.Empty));
+
+            string host = baseUri.Host;
+            string instance = "dev";
+            string type = lo.ContentType;
+            string fuid = lo.FilePhysicalFolderFUID.ToString();
+            string title = lo.FileName;
+
+            string url = string.Format("http://{0}/EdulearnNETUpload/{1}/learningobject/{2}/{3}/{4}",
+                            host,
+                            instance,
+                            type,
+                            fuid,
+                            title);
+
+            return this.Ok(url);
+
         }
 
         [Route("quiz/{quizId}")]
@@ -124,7 +159,7 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        public int GetLOID(int quizId)
+        private int GetLOID(int quizId)
         {
             DBEntityContainer db = new DBEntityContainer();
 

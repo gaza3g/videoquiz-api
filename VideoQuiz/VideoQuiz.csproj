@@ -202,6 +202,9 @@
       <DependentUpon>DBEntity.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LOResource.cs">
+      <DependentUpon>DBEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionContainer.cs" />
