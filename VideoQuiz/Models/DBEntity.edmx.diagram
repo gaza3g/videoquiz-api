@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="30eda3473dd7459290636aa31ea46f31" Name="Diagram1" >
         <EntityTypeShape EntityType="DBEntity.QZVideoQuizAttachement" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DBEntity.LOResource" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

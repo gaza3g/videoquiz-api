@@ -17,7 +17,6 @@ namespace VideoQuiz.Models
         [JsonProperty("name")]
         public string Title { get; set; }
 
-        [JsonIgnore]
         public int? Order { get; set; }
     }
 }

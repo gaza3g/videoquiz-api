@@ -28,6 +28,7 @@ namespace VideoQuiz.Models
         }
     
         public virtual DbSet<QZVideoQuizAttachement> QZVideoQuizAttachement { get; set; }
+        public virtual DbSet<LOResource> LOResource { get; set; }
     
         public virtual int QZ_GetAllSectionsQuestionsForVideoQuiz(Nullable<int> quizID)
         {
