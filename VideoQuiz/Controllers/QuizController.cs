@@ -78,9 +78,9 @@ namespace VideoQuiz.Controllers
 
         }
 
-        [Route("quiz/{quizId}")]
+        [Route("quiz/{quizId}/{puid}")]
         [HttpGet, HttpOptions]
-        public IHttpActionResult Get(int quizId)
+        public IHttpActionResult Get(int quizId, string puid)
         {
             var db_questions = this.GetAllQuestionsFromQuiz(quizId);
 

@@ -5,7 +5,7 @@ using System.Web;
 using Newtonsoft.Json;
 
 namespace VideoQuiz.Models
-{8
+{
     public class Question
     {
         [JsonProperty("id")]
