@@ -82,7 +82,7 @@ namespace VideoQuiz.Controllers
         [HttpGet, HttpOptions]
         public IHttpActionResult Get(int quizId, string puid)
         {
-            var db_questions = this.GetAllQuestionsFromQuiz(quizId);
+            var db_questions = this.GetAllQuestionsFromQuiz(quizId, puid);
 
             DBEntityContainer db = new DBEntityContainer();
 
@@ -123,13 +123,22 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        private List<Question> GetAllQuestionsFromQuiz(int quizId)
+        private List<Question> GetAllQuestionsFromQuiz(int quizId, string puid)
         {
             List<Question> questionList = new List<Question>();
 
             using (DBEntityContainer db = new DBEntityContainer())
             {
                 var result = db.QZ_Video_GetAllSectionsQuestions(quizId).ToList();
+
+                // Get attempt number
+                var convertedPUID = Guid.Parse(puid);
+                int attempt = db.QZResult
+                                .Where(q => q.QuizID == quizId)
+                                .Where(q => q.PUID == convertedPUID)
+                                .Select(q => q.Attempt)
+                                .DefaultIfEmpty(1)
+                                .Max();
 
                 foreach (var item in result.ToList())
                 {
@@ -143,6 +152,7 @@ namespace VideoQuiz.Controllers
                             Options = questionOptions,
                             RecordsResponse = true,
                             CorrectAnswer = String.Empty,
+                            CurrentAttempt = attempt,
                             Type = "single"
                         }
                     );
