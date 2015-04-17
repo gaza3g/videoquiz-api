@@ -56,7 +56,7 @@ namespace VideoQuiz.Controllers
         {
             int loId = GetLOID(quizId);
 
-            DBEntityContainer db = new DBEntityContainer();
+            DBEntityContainer db = GetDB();
 
             var lo = db.LOResource.Where(l => l.ID == loId).SingleOrDefault();
             Uri baseUri = new Uri(Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, String.Empty));
@@ -78,13 +78,13 @@ namespace VideoQuiz.Controllers
 
         }
 
-        [Route("quiz/{quizId}")]
+        [Route("quiz/{quizId}/{puid}")]
         [HttpGet, HttpOptions]
-        public IHttpActionResult Get(int quizId)
+        public IHttpActionResult Get(int quizId, string puid)
         {
-            var db_questions = this.GetAllQuestionsFromQuiz(quizId);
+            var db_questions = this.GetAllQuestionsFromQuiz(quizId, puid);
 
-            DBEntityContainer db = new DBEntityContainer();
+            DBEntityContainer db = GetDB();
 
             var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
 
@@ -123,13 +123,22 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        private List<Question> GetAllQuestionsFromQuiz(int quizId)
+        private List<Question> GetAllQuestionsFromQuiz(int quizId, string puid)
         {
             List<Question> questionList = new List<Question>();
 
-            using (DBEntityContainer db = new DBEntityContainer())
+            using (DBEntityContainer db = GetDB())
             {
                 var result = db.QZ_Video_GetAllSectionsQuestions(quizId).ToList();
+
+                // Get attempt number
+                var convertedPUID = Guid.Parse(puid);
+                int attempt = db.QZResult
+                                .Where(q => q.QuizID == quizId)
+                                .Where(q => q.PUID == convertedPUID)
+                                .Select(q => q.Attempt)
+                                .DefaultIfEmpty(1)
+                                .Max();
 
                 foreach (var item in result.ToList())
                 {
@@ -143,6 +152,7 @@ namespace VideoQuiz.Controllers
                             Options = questionOptions,
                             RecordsResponse = true,
                             CorrectAnswer = String.Empty,
+                            CurrentAttempt = attempt,
                             Type = "single"
                         }
                     );
@@ -161,7 +171,7 @@ namespace VideoQuiz.Controllers
         /// <returns></returns>
         private int GetLOID(int quizId)
         {
-            DBEntityContainer db = new DBEntityContainer();
+            DBEntityContainer db = GetDB();
 
             int loId = db.QZVideoQuizAttachement.Where(q => q.QuizID == quizId).SingleOrDefault().LOID;
 
@@ -182,7 +192,8 @@ namespace VideoQuiz.Controllers
         {
             List<QuestionOption> optionList = new List<QuestionOption>();
 
-            using (DBEntityContainer db = new DBEntityContainer())
+
+            using (DBEntityContainer db = GetDB())
             {
                 var result = db.QZ_GetAnswer_MCH(questionId).ToList();
 
@@ -199,6 +210,14 @@ namespace VideoQuiz.Controllers
         }
 
 
+        private DBEntityContainer GetDB()
+        {
+
+            return DBEntityContainer.ConnectToDatabase("beta3",
+                                                "eduservice_dev",
+                                                "eduservice",
+                                                "eduservice");
+        }
 
     }
 }

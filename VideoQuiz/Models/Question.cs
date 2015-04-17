@@ -23,6 +23,9 @@ namespace VideoQuiz.Models
         [JsonProperty("correctAnswer")]
         public string CorrectAnswer { get; set; }
 
+        [JsonProperty("currentAttempt")]
+        public int CurrentAttempt { get; set; }
+
         public string Type { get; set; }
 
         public List<QuestionOption> Options { get; set; }

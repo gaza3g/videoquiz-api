@@ -27,6 +27,20 @@
           <Property Name="DateTimeCreated" Type="datetime" />
           <Property Name="DateTimeModified" Type="datetime" />
         </EntityType>
+        <EntityType Name="QZResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuizID" Type="int" Nullable="false" />
+          <Property Name="PUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Attempt" Type="int" Nullable="false" />
+          <Property Name="TotalScore" Type="float" Nullable="false" />
+          <Property Name="Begintime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="Status" Type="int" />
+          <Property Name="MaxScore" Type="float" />
+        </EntityType>
         <EntityType Name="QZVideoQuizAttachement">
           <Key>
             <PropertyRef Name="ID" />
@@ -46,6 +60,7 @@
         </Function>
         <EntityContainer Name="DBEntityStoreContainer">
           <EntitySet Name="LOResource" EntityType="Self.LOResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QZResult" EntityType="Self.QZResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -70,6 +85,7 @@
           </FunctionImport>
           <EntitySet Name="QZVideoQuizAttachement" EntityType="DBEntity.QZVideoQuizAttachement" />
           <EntitySet Name="LOResource" EntityType="DBEntity.LOResource" />
+          <EntitySet Name="QZResult" EntityType="DBEntity.QZResult" />
         </EntityContainer>
         <ComplexType Name="QZ_GetAnswer_MCH_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -121,6 +137,20 @@
           <Property Name="ModifidedByPUID" Type="Guid" />
           <Property Name="DateTimeCreated" Type="DateTime" Precision="3" />
           <Property Name="DateTimeModified" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="QZResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuizID" Type="Int32" Nullable="false" />
+          <Property Name="PUID" Type="Guid" Nullable="false" />
+          <Property Name="Attempt" Type="Int32" Nullable="false" />
+          <Property Name="TotalScore" Type="Double" Nullable="false" />
+          <Property Name="Begintime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="MaxScore" Type="Double" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -191,6 +221,21 @@
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="FilePhysicalFolderFUID" ColumnName="FilePhysicalFolderFUID" />
                 <ScalarProperty Name="VirtualFolderID" ColumnName="VirtualFolderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QZResult">
+            <EntityTypeMapping TypeName="DBEntity.QZResult">
+              <MappingFragment StoreEntitySet="QZResult">
+                <ScalarProperty Name="MaxScore" ColumnName="MaxScore" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Begintime" ColumnName="Begintime" />
+                <ScalarProperty Name="TotalScore" ColumnName="TotalScore" />
+                <ScalarProperty Name="Attempt" ColumnName="Attempt" />
+                <ScalarProperty Name="PUID" ColumnName="PUID" />
+                <ScalarProperty Name="QuizID" ColumnName="QuizID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
