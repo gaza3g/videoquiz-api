@@ -201,6 +201,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBEntity.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\DBEntityContainer.DynamicConnectionString.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LOResource.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>

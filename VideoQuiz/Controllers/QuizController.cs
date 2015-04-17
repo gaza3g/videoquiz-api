@@ -56,7 +56,7 @@ namespace VideoQuiz.Controllers
         {
             int loId = GetLOID(quizId);
 
-            DBEntityContainer db = new DBEntityContainer();
+            DBEntityContainer db = GetDB();
 
             var lo = db.LOResource.Where(l => l.ID == loId).SingleOrDefault();
             Uri baseUri = new Uri(Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, String.Empty));
@@ -84,7 +84,7 @@ namespace VideoQuiz.Controllers
         {
             var db_questions = this.GetAllQuestionsFromQuiz(quizId, puid);
 
-            DBEntityContainer db = new DBEntityContainer();
+            DBEntityContainer db = GetDB();
 
             var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
 
@@ -127,7 +127,7 @@ namespace VideoQuiz.Controllers
         {
             List<Question> questionList = new List<Question>();
 
-            using (DBEntityContainer db = new DBEntityContainer())
+            using (DBEntityContainer db = GetDB())
             {
                 var result = db.QZ_Video_GetAllSectionsQuestions(quizId).ToList();
 
@@ -171,7 +171,7 @@ namespace VideoQuiz.Controllers
         /// <returns></returns>
         private int GetLOID(int quizId)
         {
-            DBEntityContainer db = new DBEntityContainer();
+            DBEntityContainer db = GetDB();
 
             int loId = db.QZVideoQuizAttachement.Where(q => q.QuizID == quizId).SingleOrDefault().LOID;
 
@@ -192,7 +192,8 @@ namespace VideoQuiz.Controllers
         {
             List<QuestionOption> optionList = new List<QuestionOption>();
 
-            using (DBEntityContainer db = new DBEntityContainer())
+
+            using (DBEntityContainer db = GetDB())
             {
                 var result = db.QZ_GetAnswer_MCH(questionId).ToList();
 
@@ -209,6 +210,14 @@ namespace VideoQuiz.Controllers
         }
 
 
+        private DBEntityContainer GetDB()
+        {
+
+            return DBEntityContainer.ConnectToDatabase("beta3",
+                                                "eduservice_dev",
+                                                "eduservice",
+                                                "eduservice");
+        }
 
     }
 }
