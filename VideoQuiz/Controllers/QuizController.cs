@@ -23,26 +23,26 @@ namespace VideoQuiz.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class QuizController : ApiController
     {
-        public class QuestionResponse
-        {
-            public string QuizId { get; set; }
-            public string QuestionId { get; set; }
-            public string OptionId { get; set; }
-            public string OptionText { get; set; }
-        }
+        //public class QuestionResponse
+        //{
+        //    public string QuizId { get; set; }
+        //    public string QuestionId { get; set; }
+        //    public string OptionId { get; set; }
+        //    public string OptionText { get; set; }
+        //}
 
-        [Route("quiz/response")]
-        [HttpPost, HttpOptions]
-        public IHttpActionResult Post([FromBody] QuestionResponse response)
-        {
-            if (this.Request.Method == HttpMethod.Post)
-            {
-                // Do something with it, for e.g store in DB
-                return this.Ok(response);
-            }
+        //[Route("quiz/response")]
+        //[HttpPost, HttpOptions]
+        //public IHttpActionResult Post([FromBody] QuestionResponse response)
+        //{
+        //    if (this.Request.Method == HttpMethod.Post)
+        //    {
+        //        // Do something with it, for e.g store in DB
+        //        return this.Ok(response);
+        //    }
 
-            return this.Ok();
-        }
+        //    return this.Ok();
+        //}
 
 
         /// <summary>
@@ -50,19 +50,18 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        [Route("quiz/{quizId}/video")]
+        [Route("{instance}/quiz/{quizId}/video")]
         [HttpGet, HttpOptions]
-        public IHttpActionResult GetVideoUrl(int quizId)
+        public IHttpActionResult GetVideoUrl(string instance, int quizId)
         {
-            int loId = GetLOID(quizId);
+            int loId = GetLOID(instance, quizId);
 
-            DBEntityContainer db = GetDB();
+            DBEntityContainer db = GetDB(instance);
 
             var lo = db.LOResource.Where(l => l.ID == loId).SingleOrDefault();
             Uri baseUri = new Uri(Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, String.Empty));
 
             string host = baseUri.Host;
-            string instance = "dev";
             string type = lo.ContentType;
             string fuid = lo.FilePhysicalFolderFUID.ToString();
             string title = lo.FileName;
@@ -78,13 +77,13 @@ namespace VideoQuiz.Controllers
 
         }
 
-        [Route("quiz/{quizId}/{puid}")]
+        [Route("{instance}/quiz/{quizId}/{puid}")]
         [HttpGet, HttpOptions]
-        public IHttpActionResult Get(int quizId, string puid)
+        public IHttpActionResult Get(string instance, int quizId, string puid)
         {
-            var db_questions = this.GetAllQuestionsFromQuiz(quizId, puid);
+            var db_questions = this.GetAllQuestionsFromQuiz(instance, quizId, puid);
 
-            DBEntityContainer db = GetDB();
+            DBEntityContainer db = GetDB(instance);
 
             var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
 
@@ -123,11 +122,11 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        private List<Question> GetAllQuestionsFromQuiz(int quizId, string puid)
+        private List<Question> GetAllQuestionsFromQuiz(string instance, int quizId, string puid)
         {
             List<Question> questionList = new List<Question>();
 
-            using (DBEntityContainer db = GetDB())
+            using (DBEntityContainer db = GetDB(instance))
             {
                 var result = db.QZ_Video_GetAllSectionsQuestions(quizId).ToList();
 
@@ -137,12 +136,14 @@ namespace VideoQuiz.Controllers
                                 .Where(q => q.QuizID == quizId)
                                 .Where(q => q.PUID == convertedPUID)
                                 .Select(q => q.Attempt)
-                                .DefaultIfEmpty(1)
+                                .DefaultIfEmpty(0)
                                 .Max();
+
+                attempt += 1;
 
                 foreach (var item in result.ToList())
                 {
-                    var questionOptions = GetOptionsFromQuestion(item.ID);
+                    var questionOptions = GetOptionsFromQuestion(instance, item.ID);
 
                     questionList.Add(
                         new Question {
@@ -169,9 +170,9 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="quizId"></param>
         /// <returns></returns>
-        private int GetLOID(int quizId)
+        private int GetLOID(string instance, int quizId)
         {
-            DBEntityContainer db = GetDB();
+            DBEntityContainer db = GetDB(instance);
 
             int loId = db.QZVideoQuizAttachement.Where(q => q.QuizID == quizId).SingleOrDefault().LOID;
 
@@ -188,12 +189,12 @@ namespace VideoQuiz.Controllers
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        private List<QuestionOption> GetOptionsFromQuestion(int questionId)
+        private List<QuestionOption> GetOptionsFromQuestion(string instance, int questionId)
         {
             List<QuestionOption> optionList = new List<QuestionOption>();
 
 
-            using (DBEntityContainer db = GetDB())
+            using (DBEntityContainer db = GetDB(instance))
             {
                 var result = db.QZ_GetAnswer_MCH(questionId).ToList();
 
@@ -210,11 +211,11 @@ namespace VideoQuiz.Controllers
         }
 
 
-        private DBEntityContainer GetDB()
+        private DBEntityContainer GetDB(string instance)
         {
 
             return DBEntityContainer.ConnectToDatabase("beta3",
-                                                "eduservice_dev",
+                                                "eduservice_" + instance,
                                                 "eduservice",
                                                 "eduservice");
         }
