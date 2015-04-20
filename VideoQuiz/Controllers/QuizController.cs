@@ -14,6 +14,7 @@ using System.Web.Http.Description;
 using VideoQuiz.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace VideoQuiz.Controllers
 {
@@ -224,11 +225,19 @@ namespace VideoQuiz.Controllers
         private DBEntityContainer GetDB(string instance)
         {
 
-            return DBEntityContainer.ConnectToDatabase("beta3",
-                                                "eduservice_" + instance,
-                                                "eduservice",
-                                                "eduservice");
+            string databaseServer = Convert.ToString(ConfigurationManager.AppSettings["DatabaseServer"]);
+            string databaseUsername = Convert.ToString(ConfigurationManager.AppSettings["DatabaseUsername"]);
+            string databasePassword = Convert.ToString(ConfigurationManager.AppSettings["DatabasePassword"]);
+            string databaseCatalog = "eduservice_" + instance;
+
+            return DBEntityContainer.ConnectToDatabase(
+                                                databaseServer,
+                                                databaseCatalog,
+                                                databaseUsername,
+                                                databasePassword);
         }
 
+
     }
+
 }
