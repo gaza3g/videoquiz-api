@@ -45,6 +45,25 @@ namespace VideoQuiz.Controllers
         //}
 
 
+        [Route("{instance}/quiz/{quizId}/title")]
+        [HttpGet, HttpOptions]
+        public IHttpActionResult GetQuizTitle(string instance, int quizId)
+        {
+            DBEntityContainer db = GetDB(instance);
+
+            string title = db.QZQuiz
+                          .Where(q => q.ID == quizId)
+                          .Select(q => q.Title)
+                          .SingleOrDefault();
+
+            db.Dispose();
+
+            if (title == null)
+                return this.NotFound();
+
+            return this.Ok(title);
+        }
+
         /// <summary>
         /// Self explanatory. Form video URL by joining columns from the LOResource table.
         /// </summary>
@@ -72,6 +91,11 @@ namespace VideoQuiz.Controllers
                             type,
                             fuid,
                             title);
+
+            db.Dispose();
+
+            if (url == null)
+                return this.NotFound();
 
             return this.Ok(url);
 

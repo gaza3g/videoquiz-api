@@ -23,5 +23,7 @@ namespace VideoQuiz.Models
         public Nullable<System.DateTime> EndTime { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<double> MaxScore { get; set; }
+    
+        public virtual QZQuiz QZQuiz { get; set; }
     }
 }

@@ -17,5 +17,7 @@ namespace VideoQuiz.Models
         public int ID { get; set; }
         public int QuizID { get; set; }
         public int LOID { get; set; }
+    
+        public virtual QZQuiz QZQuiz { get; set; }
     }
 }

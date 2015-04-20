@@ -27,6 +27,53 @@
           <Property Name="DateTimeCreated" Type="datetime" />
           <Property Name="DateTimeModified" Type="datetime" />
         </EntityType>
+        <EntityType Name="QZQuiz">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ThemeID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="ResourceID" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="Passing" Type="float" />
+          <Property Name="Link" Type="nvarchar(max)" />
+          <Property Name="TimeLimit" Type="float" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatorPUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifyByPUID" Type="uniqueidentifier" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="AnswerReportMode" Type="int" Nullable="false" />
+          <Property Name="DetailReportMode" Type="int" Nullable="false" />
+          <Property Name="DisplayMode" Type="int" Nullable="false" />
+          <Property Name="OptionType" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="SectionRandomEnabled" Type="bit" Nullable="false" />
+          <Property Name="QuestionRandomEnabled" Type="bit" Nullable="false" />
+          <Property Name="ChoiceRandomEnabled" Type="bit" Nullable="false" />
+          <Property Name="HideSection" Type="bit" Nullable="false" />
+          <Property Name="SubmitOnly" Type="bit" Nullable="false" />
+          <Property Name="SaveResponse" Type="bit" Nullable="false" />
+          <Property Name="IsOtas" Type="bit" />
+          <Property Name="OtasDocumentDisplayMode" Type="int" />
+          <Property Name="OtasOptionDisplayMode" Type="int" />
+          <Property Name="IsPublish" Type="bit" />
+          <Property Name="Attempts" Type="int" />
+          <Property Name="BeginTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="IsSIO" Type="bit" />
+          <Property Name="IsPublic" Type="bit" />
+          <Property Name="IsSchema" Type="bit" />
+          <Property Name="PublishDate" Type="datetime" Nullable="false" />
+          <Property Name="HLConfi" Type="varchar(max)" />
+          <Property Name="rptShowDate" Type="datetime" />
+          <Property Name="TestMode" Type="int" />
+          <Property Name="EmailAuthor" Type="bit" Nullable="false" />
+          <Property Name="RetakeQuiz" Type="bit" Nullable="false" />
+          <Property Name="IsSkillset" Type="bit" />
+        </EntityType>
         <EntityType Name="QZResult">
           <Key>
             <PropertyRef Name="ID" />
@@ -49,6 +96,34 @@
           <Property Name="QuizID" Type="int" Nullable="false" />
           <Property Name="LOID" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_QZResult_QZQuiz">
+          <End Role="QZQuiz" Type="Self.QZQuiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QZResult" Type="Self.QZResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuiz">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZResult">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QZVideoQuizAttachement_QZQuiz">
+          <End Role="QZQuiz" Type="Self.QZQuiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QZVideoQuizAttachement" Type="Self.QZVideoQuizAttachement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuiz">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZVideoQuizAttachement">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="QZ_GetAnswer_MCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="questionID" Type="int" Mode="In" />
         </Function>
@@ -60,8 +135,17 @@
         </Function>
         <EntityContainer Name="DBEntityStoreContainer">
           <EntitySet Name="LOResource" EntityType="Self.LOResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QZQuiz" EntityType="Self.QZQuiz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZResult" EntityType="Self.QZResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_QZResult_QZQuiz" Association="Self.FK_QZResult_QZQuiz">
+            <End Role="QZQuiz" EntitySet="QZQuiz" />
+            <End Role="QZResult" EntitySet="QZResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QZVideoQuizAttachement_QZQuiz" Association="Self.FK_QZVideoQuizAttachement_QZQuiz">
+            <End Role="QZQuiz" EntitySet="QZQuiz" />
+            <End Role="QZVideoQuizAttachement" EntitySet="QZVideoQuizAttachement" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -86,6 +170,15 @@
           <EntitySet Name="QZVideoQuizAttachement" EntityType="DBEntity.QZVideoQuizAttachement" />
           <EntitySet Name="LOResource" EntityType="DBEntity.LOResource" />
           <EntitySet Name="QZResult" EntityType="DBEntity.QZResult" />
+          <EntitySet Name="QZQuiz" EntityType="DBEntity.QZQuiz" />
+          <AssociationSet Name="FK_QZResult_QZQuiz" Association="DBEntity.FK_QZResult_QZQuiz">
+            <End Role="QZQuiz" EntitySet="QZQuiz" />
+            <End Role="QZResult" EntitySet="QZResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QZVideoQuizAttachement_QZQuiz" Association="DBEntity.FK_QZVideoQuizAttachement_QZQuiz">
+            <End Role="QZQuiz" EntitySet="QZQuiz" />
+            <End Role="QZVideoQuizAttachement" EntitySet="QZVideoQuizAttachement" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="QZ_GetAnswer_MCH_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -115,6 +208,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuizID" Type="Int32" Nullable="false" />
           <Property Name="LOID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QZQuiz" Relationship="DBEntity.FK_QZVideoQuizAttachement_QZQuiz" FromRole="QZVideoQuizAttachement" ToRole="QZQuiz" />
         </EntityType>
         <EntityType Name="LOResource">
           <Key>
@@ -151,7 +245,85 @@
           <Property Name="EndTime" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
           <Property Name="MaxScore" Type="Double" />
+          <NavigationProperty Name="QZQuiz" Relationship="DBEntity.FK_QZResult_QZQuiz" FromRole="QZResult" ToRole="QZQuiz" />
         </EntityType>
+        <EntityType Name="QZQuiz">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ThemeID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="ResourceID" Type="Int32" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Passing" Type="Double" />
+          <Property Name="Link" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TimeLimit" Type="Double" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatorPUID" Type="Guid" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifyByPUID" Type="Guid" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="AnswerReportMode" Type="Int32" Nullable="false" />
+          <Property Name="DetailReportMode" Type="Int32" Nullable="false" />
+          <Property Name="DisplayMode" Type="Int32" Nullable="false" />
+          <Property Name="OptionType" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="SectionRandomEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="QuestionRandomEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="ChoiceRandomEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="HideSection" Type="Boolean" Nullable="false" />
+          <Property Name="SubmitOnly" Type="Boolean" Nullable="false" />
+          <Property Name="SaveResponse" Type="Boolean" Nullable="false" />
+          <Property Name="IsOtas" Type="Boolean" />
+          <Property Name="OtasDocumentDisplayMode" Type="Int32" />
+          <Property Name="OtasOptionDisplayMode" Type="Int32" />
+          <Property Name="IsPublish" Type="Boolean" />
+          <Property Name="Attempts" Type="Int32" />
+          <Property Name="BeginTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="IsSIO" Type="Boolean" />
+          <Property Name="IsPublic" Type="Boolean" />
+          <Property Name="IsSchema" Type="Boolean" />
+          <Property Name="PublishDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HLConfi" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="rptShowDate" Type="DateTime" Precision="3" />
+          <Property Name="TestMode" Type="Int32" />
+          <Property Name="EmailAuthor" Type="Boolean" Nullable="false" />
+          <Property Name="RetakeQuiz" Type="Boolean" Nullable="false" />
+          <Property Name="IsSkillset" Type="Boolean" />
+          <NavigationProperty Name="QZResult" Relationship="DBEntity.FK_QZResult_QZQuiz" FromRole="QZQuiz" ToRole="QZResult" />
+          <NavigationProperty Name="QZVideoQuizAttachement" Relationship="DBEntity.FK_QZVideoQuizAttachement_QZQuiz" FromRole="QZQuiz" ToRole="QZVideoQuizAttachement" />
+        </EntityType>
+        <Association Name="FK_QZResult_QZQuiz">
+          <End Type="DBEntity.QZQuiz" Role="QZQuiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBEntity.QZResult" Role="QZResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuiz">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZResult">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QZVideoQuizAttachement_QZQuiz">
+          <End Type="DBEntity.QZQuiz" Role="QZQuiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBEntity.QZVideoQuizAttachement" Role="QZVideoQuizAttachement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuiz">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZVideoQuizAttachement">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -236,6 +408,54 @@
                 <ScalarProperty Name="Attempt" ColumnName="Attempt" />
                 <ScalarProperty Name="PUID" ColumnName="PUID" />
                 <ScalarProperty Name="QuizID" ColumnName="QuizID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QZQuiz">
+            <EntityTypeMapping TypeName="DBEntity.QZQuiz">
+              <MappingFragment StoreEntitySet="QZQuiz">
+                <ScalarProperty Name="IsSkillset" ColumnName="IsSkillset" />
+                <ScalarProperty Name="RetakeQuiz" ColumnName="RetakeQuiz" />
+                <ScalarProperty Name="EmailAuthor" ColumnName="EmailAuthor" />
+                <ScalarProperty Name="TestMode" ColumnName="TestMode" />
+                <ScalarProperty Name="rptShowDate" ColumnName="rptShowDate" />
+                <ScalarProperty Name="HLConfi" ColumnName="HLConfi" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="IsSchema" ColumnName="IsSchema" />
+                <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+                <ScalarProperty Name="IsSIO" ColumnName="IsSIO" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="Attempts" ColumnName="Attempts" />
+                <ScalarProperty Name="IsPublish" ColumnName="IsPublish" />
+                <ScalarProperty Name="OtasOptionDisplayMode" ColumnName="OtasOptionDisplayMode" />
+                <ScalarProperty Name="OtasDocumentDisplayMode" ColumnName="OtasDocumentDisplayMode" />
+                <ScalarProperty Name="IsOtas" ColumnName="IsOtas" />
+                <ScalarProperty Name="SaveResponse" ColumnName="SaveResponse" />
+                <ScalarProperty Name="SubmitOnly" ColumnName="SubmitOnly" />
+                <ScalarProperty Name="HideSection" ColumnName="HideSection" />
+                <ScalarProperty Name="ChoiceRandomEnabled" ColumnName="ChoiceRandomEnabled" />
+                <ScalarProperty Name="QuestionRandomEnabled" ColumnName="QuestionRandomEnabled" />
+                <ScalarProperty Name="SectionRandomEnabled" ColumnName="SectionRandomEnabled" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="OptionType" ColumnName="OptionType" />
+                <ScalarProperty Name="DisplayMode" ColumnName="DisplayMode" />
+                <ScalarProperty Name="DetailReportMode" ColumnName="DetailReportMode" />
+                <ScalarProperty Name="AnswerReportMode" ColumnName="AnswerReportMode" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyByPUID" ColumnName="ModifyByPUID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatorPUID" ColumnName="CreatorPUID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="TimeLimit" ColumnName="TimeLimit" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Passing" ColumnName="Passing" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ResourceID" ColumnName="ResourceID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ThemeID" ColumnName="ThemeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

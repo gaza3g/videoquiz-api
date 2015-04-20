@@ -8,6 +8,9 @@
         <EntityTypeShape EntityType="DBEntity.QZVideoQuizAttachement" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="DBEntity.LOResource" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="DBEntity.QZResult" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DBEntity.QZQuiz" Width="1.5" PointX="0.75" PointY="0.75" />
+        <AssociationConnector Association="DBEntity.FK_QZResult_QZQuiz" />
+        <AssociationConnector Association="DBEntity.FK_QZVideoQuizAttachement_QZQuiz" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
