@@ -23,31 +23,10 @@ namespace VideoQuiz.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class QuizController : ApiController
     {
-        //public class QuestionResponse
-        //{
-        //    public string QuizId { get; set; }
-        //    public string QuestionId { get; set; }
-        //    public string OptionId { get; set; }
-        //    public string OptionText { get; set; }
-        //}
-
-        //[Route("quiz/response")]
-        //[HttpPost, HttpOptions]
-        //public IHttpActionResult Post([FromBody] QuestionResponse response)
-        //{
-        //    if (this.Request.Method == HttpMethod.Post)
-        //    {
-        //        // Do something with it, for e.g store in DB
-        //        return this.Ok(response);
-        //    }
-
-        //    return this.Ok();
-        //}
-
 
         [Route("{instance}/quiz/{quizId}/title")]
         [HttpGet, HttpOptions]
-        public IHttpActionResult GetQuizTitle(string instance, int quizId)
+        public HttpResponseMessage GetQuizTitle(string instance, int quizId)
         {
             DBEntityContainer db = GetDB(instance);
 
@@ -59,9 +38,14 @@ namespace VideoQuiz.Controllers
             db.Dispose();
 
             if (title == null)
-                return this.NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return this.Ok(title);
+
+            //return this.Ok(title.Replace("\"", String.Empty));
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(title);
+            return response;
+
         }
 
         /// <summary>
@@ -71,7 +55,7 @@ namespace VideoQuiz.Controllers
         /// <returns></returns>
         [Route("{instance}/quiz/{quizId}/video")]
         [HttpGet, HttpOptions]
-        public IHttpActionResult GetVideoUrl(string instance, int quizId)
+        public HttpResponseMessage GetVideoUrl(string instance, int quizId)
         {
             int loId = GetLOID(instance, quizId);
 
@@ -95,9 +79,11 @@ namespace VideoQuiz.Controllers
             db.Dispose();
 
             if (url == null)
-                return this.NotFound();
+                throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return this.Ok(url);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(url);
+            return response;
 
         }
 
