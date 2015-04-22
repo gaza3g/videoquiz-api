@@ -11,6 +11,10 @@
         <EntityTypeShape EntityType="DBEntity.QZQuiz" Width="1.5" PointX="0.75" PointY="0.75" />
         <AssociationConnector Association="DBEntity.FK_QZResult_QZQuiz" />
         <AssociationConnector Association="DBEntity.FK_QZVideoQuizAttachement_QZQuiz" />
+        <EntityTypeShape EntityType="DBEntity.QZQuestion" Width="1.5" PointX="5.25" PointY="6.5" />
+        <EntityTypeShape EntityType="DBEntity.QZSection" Width="1.5" PointX="3" PointY="7.25" />
+        <AssociationConnector Association="DBEntity.FK_QZQuestion_QZSection" />
+        <AssociationConnector Association="DBEntity.FK_QZSection_QZQuiz" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

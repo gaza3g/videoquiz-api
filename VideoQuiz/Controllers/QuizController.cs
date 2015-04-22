@@ -139,7 +139,20 @@ namespace VideoQuiz.Controllers
 
             using (DBEntityContainer db = GetDB(instance))
             {
-                var result = db.QZ_Video_GetAllSectionsQuestions(quizId).ToList();
+
+                /* Get all questions in all sections for a quiz. */
+                var result =
+                            from s in db.QZSection
+                            join q in db.QZQuestion
+                                on s.ID equals q.SectionID
+                            where s.QuizID == quizId
+                            select new { 
+                                        Id = q.ID, 
+                                        TypeId = q.TypeID, 
+                                        Question = q.Question 
+                            };
+
+                
 
                 // Get attempt number
                 var convertedPUID = Guid.Parse(puid);
@@ -154,12 +167,12 @@ namespace VideoQuiz.Controllers
 
                 foreach (var item in result.ToList())
                 {
-                    var questionOptions = GetOptionsFromQuestion(instance, item.ID);
+                    var questionOptions = GetOptionsFromQuestion(instance, item.Id);
 
                     questionList.Add(
                         new Question {
-                            QuestionId = item.ID,
-                            TypeId = item.TypeID,
+                            QuestionId = item.Id,
+                            TypeId = item.TypeId,
                             Title = item.Question,
                             Options = questionOptions,
                             RecordsResponse = true,
@@ -192,6 +205,7 @@ namespace VideoQuiz.Controllers
             return loId;
 
         }
+
 
 
         /// <summary>

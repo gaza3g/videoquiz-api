@@ -27,6 +27,26 @@
           <Property Name="DateTimeCreated" Type="datetime" />
           <Property Name="DateTimeModified" Type="datetime" />
         </EntityType>
+        <EntityType Name="QZQuestion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="SectionID" Type="int" Nullable="false" />
+          <Property Name="SIO_ID" Type="int" />
+          <Property Name="Question" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Objective" Type="nvarchar(max)" />
+          <Property Name="MediaLink" Type="nvarchar(max)" />
+          <Property Name="Link" Type="nvarchar(max)" />
+          <Property Name="ChoiceRandomDisabled" Type="bit" Nullable="false" />
+          <Property Name="Feedback" Type="nvarchar(max)" />
+          <Property Name="Sequence" Type="int" Nullable="false" />
+          <Property Name="Score" Type="float" Nullable="false" />
+          <Property Name="IsRemark" Type="bit" Nullable="false" />
+          <Property Name="OptRationale" Type="bit" Nullable="false" />
+          <Property Name="ImgRationale" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="QZQuiz">
           <Key>
             <PropertyRef Name="ID" />
@@ -88,6 +108,17 @@
           <Property Name="Status" Type="int" />
           <Property Name="MaxScore" Type="float" />
         </EntityType>
+        <EntityType Name="QZSection">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuizID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Medialink" Type="nvarchar(max)" />
+          <Property Name="Sequence" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="QZVideoQuizAttachement">
           <Key>
             <PropertyRef Name="ID" />
@@ -96,6 +127,20 @@
           <Property Name="QuizID" Type="int" Nullable="false" />
           <Property Name="LOID" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_QZQuestion_QZSection">
+          <End Role="QZSection" Type="Self.QZSection" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QZQuestion" Type="Self.QZQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZSection">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZQuestion">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_QZResult_QZQuiz">
           <End Role="QZQuiz" Type="Self.QZQuiz" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -106,6 +151,20 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="QZResult">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QZSection_QZQuiz">
+          <End Role="QZQuiz" Type="Self.QZQuiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QZSection" Type="Self.QZSection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuiz">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZSection">
               <PropertyRef Name="QuizID" />
             </Dependent>
           </ReferentialConstraint>
@@ -135,12 +194,22 @@
         </Function>
         <EntityContainer Name="DBEntityStoreContainer">
           <EntitySet Name="LOResource" EntityType="Self.LOResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QZQuestion" EntityType="Self.QZQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZQuiz" EntityType="Self.QZQuiz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZResult" EntityType="Self.QZResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QZSection" EntityType="Self.QZSection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_QZQuestion_QZSection" Association="Self.FK_QZQuestion_QZSection">
+            <End Role="QZSection" EntitySet="QZSection" />
+            <End Role="QZQuestion" EntitySet="QZQuestion" />
+          </AssociationSet>
           <AssociationSet Name="FK_QZResult_QZQuiz" Association="Self.FK_QZResult_QZQuiz">
             <End Role="QZQuiz" EntitySet="QZQuiz" />
             <End Role="QZResult" EntitySet="QZResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QZSection_QZQuiz" Association="Self.FK_QZSection_QZQuiz">
+            <End Role="QZQuiz" EntitySet="QZQuiz" />
+            <End Role="QZSection" EntitySet="QZSection" />
           </AssociationSet>
           <AssociationSet Name="FK_QZVideoQuizAttachement_QZQuiz" Association="Self.FK_QZVideoQuizAttachement_QZQuiz">
             <End Role="QZQuiz" EntitySet="QZQuiz" />
@@ -178,6 +247,16 @@
           <AssociationSet Name="FK_QZVideoQuizAttachement_QZQuiz" Association="DBEntity.FK_QZVideoQuizAttachement_QZQuiz">
             <End Role="QZQuiz" EntitySet="QZQuiz" />
             <End Role="QZVideoQuizAttachement" EntitySet="QZVideoQuizAttachement" />
+          </AssociationSet>
+          <EntitySet Name="QZQuestion" EntityType="DBEntity.QZQuestion" />
+          <EntitySet Name="QZSection" EntityType="DBEntity.QZSection" />
+          <AssociationSet Name="FK_QZQuestion_QZSection" Association="DBEntity.FK_QZQuestion_QZSection">
+            <End Role="QZSection" EntitySet="QZSection" />
+            <End Role="QZQuestion" EntitySet="QZQuestion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QZSection_QZQuiz" Association="DBEntity.FK_QZSection_QZQuiz">
+            <End Role="QZQuiz" EntitySet="QZQuiz" />
+            <End Role="QZSection" EntitySet="QZSection" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="QZ_GetAnswer_MCH_Result">
@@ -295,6 +374,7 @@
           <Property Name="IsSkillset" Type="Boolean" />
           <NavigationProperty Name="QZResult" Relationship="DBEntity.FK_QZResult_QZQuiz" FromRole="QZQuiz" ToRole="QZResult" />
           <NavigationProperty Name="QZVideoQuizAttachement" Relationship="DBEntity.FK_QZVideoQuizAttachement_QZQuiz" FromRole="QZQuiz" ToRole="QZVideoQuizAttachement" />
+          <NavigationProperty Name="QZSection" Relationship="DBEntity.FK_QZSection_QZQuiz" FromRole="QZQuiz" ToRole="QZSection" />
         </EntityType>
         <Association Name="FK_QZResult_QZQuiz">
           <End Type="DBEntity.QZQuiz" Role="QZQuiz" Multiplicity="1">
@@ -320,6 +400,68 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="QZVideoQuizAttachement">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="QZQuestion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="SectionID" Type="Int32" Nullable="false" />
+          <Property Name="SIO_ID" Type="Int32" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Objective" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MediaLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ChoiceRandomDisabled" Type="Boolean" Nullable="false" />
+          <Property Name="Feedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sequence" Type="Int32" Nullable="false" />
+          <Property Name="Score" Type="Double" Nullable="false" />
+          <Property Name="IsRemark" Type="Boolean" Nullable="false" />
+          <Property Name="OptRationale" Type="Boolean" Nullable="false" />
+          <Property Name="ImgRationale" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QZSection" Relationship="DBEntity.FK_QZQuestion_QZSection" FromRole="QZQuestion" ToRole="QZSection" />
+        </EntityType>
+        <EntityType Name="QZSection">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuizID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Medialink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sequence" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QZQuestion" Relationship="DBEntity.FK_QZQuestion_QZSection" FromRole="QZSection" ToRole="QZQuestion" />
+          <NavigationProperty Name="QZQuiz" Relationship="DBEntity.FK_QZSection_QZQuiz" FromRole="QZSection" ToRole="QZQuiz" />
+        </EntityType>
+        <Association Name="FK_QZQuestion_QZSection">
+          <End Type="DBEntity.QZSection" Role="QZSection" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBEntity.QZQuestion" Role="QZQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZSection">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZQuestion">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QZSection_QZQuiz">
+          <End Type="DBEntity.QZQuiz" Role="QZQuiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBEntity.QZSection" Role="QZSection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuiz">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZSection">
               <PropertyRef Name="QuizID" />
             </Dependent>
           </ReferentialConstraint>
@@ -456,6 +598,39 @@
                 <ScalarProperty Name="ResourceID" ColumnName="ResourceID" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="ThemeID" ColumnName="ThemeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QZQuestion">
+            <EntityTypeMapping TypeName="DBEntity.QZQuestion">
+              <MappingFragment StoreEntitySet="QZQuestion">
+                <ScalarProperty Name="ImgRationale" ColumnName="ImgRationale" />
+                <ScalarProperty Name="OptRationale" ColumnName="OptRationale" />
+                <ScalarProperty Name="IsRemark" ColumnName="IsRemark" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
+                <ScalarProperty Name="ChoiceRandomDisabled" ColumnName="ChoiceRandomDisabled" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="MediaLink" ColumnName="MediaLink" />
+                <ScalarProperty Name="Objective" ColumnName="Objective" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="SIO_ID" ColumnName="SIO_ID" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QZSection">
+            <EntityTypeMapping TypeName="DBEntity.QZSection">
+              <MappingFragment StoreEntitySet="QZSection">
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="Medialink" ColumnName="Medialink" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="QuizID" ColumnName="QuizID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

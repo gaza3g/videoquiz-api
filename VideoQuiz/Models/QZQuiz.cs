@@ -18,6 +18,7 @@ namespace VideoQuiz.Models
         {
             this.QZResult = new HashSet<QZResult>();
             this.QZVideoQuizAttachement = new HashSet<QZVideoQuizAttachement>();
+            this.QZSection = new HashSet<QZSection>();
         }
     
         public int ID { get; set; }
@@ -65,5 +66,6 @@ namespace VideoQuiz.Models
     
         public virtual ICollection<QZResult> QZResult { get; set; }
         public virtual ICollection<QZVideoQuizAttachement> QZVideoQuizAttachement { get; set; }
+        public virtual ICollection<QZSection> QZSection { get; set; }
     }
 }

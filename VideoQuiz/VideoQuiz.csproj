@@ -210,10 +210,16 @@
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionContainer.cs" />
     <Compile Include="Models\QuestionOption.cs" />
+    <Compile Include="Models\QZQuestion.cs">
+      <DependentUpon>DBEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\QZQuiz.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QZResult.cs">
+      <DependentUpon>DBEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QZSection.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QZVideoQuizAttachement.cs">
