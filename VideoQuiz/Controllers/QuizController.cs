@@ -96,7 +96,18 @@ namespace VideoQuiz.Controllers
 
             DBEntityContainer db = GetDB(instance);
 
-            var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
+            //var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
+            /*
+             * Retrieve cuepoints info */
+            var cuepoints = from v in db.QZVideoQuizQuePoint
+                            where v.QuizID == quizId
+                            orderby v.QuestionID
+                            select new
+                            {
+                                Id = v.ID,
+                                QuestionId = v.QuestionID,
+                                QuePoint = v.QuePoint
+                            };
 
             List<QuestionContainer> questions = new List<QuestionContainer>();
 
@@ -108,7 +119,7 @@ namespace VideoQuiz.Controllers
                 if (q.Options.Count() == 0) 
                     continue;
 
-                int cuepoint = cuepoints.Where(x => x.QuestionID == q.QuestionId).Select(x => x.QuePoint).SingleOrDefault();
+                int cuepoint = cuepoints.Where(x => x.QuestionId == q.QuestionId).Select(x => x.QuePoint).SingleOrDefault();
 
                 questions.Add(new QuestionContainer { time = cuepoint, question = new List<Question>{q} });
 

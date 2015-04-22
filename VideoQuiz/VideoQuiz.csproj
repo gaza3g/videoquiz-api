@@ -228,6 +228,9 @@
     <Compile Include="Models\QZVideoQuizAttachement.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QZVideoQuizQuePoint.cs">
+      <DependentUpon>DBEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\QZ_Video_GetQuePointsByQuizId_Result.cs">
       <DependentUpon>DBEntity.tt</DependentUpon>
     </Compile>
