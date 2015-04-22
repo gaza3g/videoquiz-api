@@ -12,8 +12,6 @@ namespace VideoQuiz.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
     
     public partial class DBEntityContainer : DbContext
     {
@@ -35,23 +33,5 @@ namespace VideoQuiz.Models
         public virtual DbSet<QZSection> QZSection { get; set; }
         public virtual DbSet<QZAnswer_MCH> QZAnswer_MCH { get; set; }
         public virtual DbSet<QZVideoQuizQuePoint> QZVideoQuizQuePoint { get; set; }
-    
-        public virtual int QZ_Video_GetCuepointsByQuizId(Nullable<int> quizID)
-        {
-            var quizIDParameter = quizID.HasValue ?
-                new ObjectParameter("quizID", quizID) :
-                new ObjectParameter("quizID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QZ_Video_GetCuepointsByQuizId", quizIDParameter);
-        }
-    
-        public virtual ObjectResult<QZ_Video_GetQuePointsByQuizId_Result> QZ_Video_GetQuePointsByQuizId(Nullable<int> quizID)
-        {
-            var quizIDParameter = quizID.HasValue ?
-                new ObjectParameter("quizID", quizID) :
-                new ObjectParameter("quizID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_Video_GetQuePointsByQuizId_Result>("QZ_Video_GetQuePointsByQuizId", quizIDParameter);
-        }
     }
 }

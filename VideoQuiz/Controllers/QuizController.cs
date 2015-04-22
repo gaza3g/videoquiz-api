@@ -96,7 +96,6 @@ namespace VideoQuiz.Controllers
 
             DBEntityContainer db = GetDB(instance);
 
-            //var cuepoints = db.QZ_Video_GetQuePointsByQuizId(quizId).ToList();
             /*
              * Retrieve cuepoints info */
             var cuepoints = from v in db.QZVideoQuizQuePoint

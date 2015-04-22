@@ -234,9 +234,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="QZ_Video_GetQuePointsByQuizId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="quizID" Type="int" Mode="In" />
-        </Function>
         <EntityContainer Name="DBEntityStoreContainer">
           <EntitySet Name="LOResource" EntityType="Self.LOResource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZAnswer_MCH" EntityType="Self.QZAnswer_MCH" Schema="dbo" store:Type="Tables" />
@@ -276,12 +273,6 @@
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBEntity" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="DBEntityContainer" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="QZ_Video_GetCuepointsByQuizId">
-          <Parameter Name="quizID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="QZ_Video_GetQuePointsByQuizId" ReturnType="Collection(DBEntity.QZ_Video_GetQuePointsByQuizId_Result)">
-          <Parameter Name="quizID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="QZVideoQuizAttachement" EntityType="DBEntity.QZVideoQuizAttachement" />
           <EntitySet Name="LOResource" EntityType="DBEntity.LOResource" />
           <EntitySet Name="QZResult" EntityType="DBEntity.QZResult" />
@@ -315,11 +306,6 @@
             <End Role="QZVideoQuizQuePoint" EntitySet="QZVideoQuizQuePoint" />
           </AssociationSet>
         </EntityContainer>
-        <ComplexType Name="QZ_Video_GetQuePointsByQuizId_Result">
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="QuestionID" Nullable="false" />
-          <Property Type="Int32" Name="QuePoint" Nullable="false" />
-        </ComplexType>
         <EntityType Name="QZVideoQuizAttachement">
           <Key>
             <PropertyRef Name="ID" />
@@ -569,15 +555,6 @@
         <Alias Key="Model" Value="DBEntity" />
         <Alias Key="Target" Value="DBEntity.Store" />
         <EntityContainerMapping CdmEntityContainer="DBEntityContainer" StorageEntityContainer="DBEntityStoreContainer">
-          <FunctionImportMapping FunctionImportName="QZ_Video_GetQuePointsByQuizId" FunctionName="DBEntity.Store.QZ_Video_GetQuePointsByQuizId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DBEntity.QZ_Video_GetQuePointsByQuizId_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-                <ScalarProperty Name="QuePoint" ColumnName="QuePoint" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="QZVideoQuizAttachement">
             <EntityTypeMapping TypeName="DBEntity.QZVideoQuizAttachement">
               <MappingFragment StoreEntitySet="QZVideoQuizAttachement">
