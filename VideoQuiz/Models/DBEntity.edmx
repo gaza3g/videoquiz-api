@@ -186,9 +186,6 @@
         <Function Name="QZ_GetAnswer_MCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="questionID" Type="int" Mode="In" />
         </Function>
-        <Function Name="QZ_Video_GetAllSectionsQuestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="quizID" Type="int" Mode="In" />
-        </Function>
         <Function Name="QZ_Video_GetQuePointsByQuizId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="quizID" Type="int" Mode="In" />
         </Function>
@@ -221,16 +218,10 @@
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBEntity" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="DBEntityContainer" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="QZ_GetAllSectionsQuestionsForVideoQuiz">
-          <Parameter Name="quizID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="QZ_GetAnswer_MCH" ReturnType="Collection(DBEntity.QZ_GetAnswer_MCH_Result)">
           <Parameter Name="questionID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="QZ_Video_GetCuepointsByQuizId">
-          <Parameter Name="quizID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="QZ_Video_GetAllSectionsQuestions" ReturnType="Collection(DBEntity.QZ_Video_GetAllSectionsQuestions_Result)">
           <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="QZ_Video_GetQuePointsByQuizId" ReturnType="Collection(DBEntity.QZ_Video_GetQuePointsByQuizId_Result)">
@@ -269,11 +260,6 @@
           <Property Type="Double" Name="ScoreLastMarked" Nullable="true" />
           <Property Type="Int32" Name="OptionOrder" Nullable="true" />
           <Property Type="String" Name="Feedback" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="QZ_Video_GetAllSectionsQuestions_Result">
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="TypeID" Nullable="false" />
-          <Property Type="String" Name="Question" Nullable="false" />
         </ComplexType>
         <ComplexType Name="QZ_Video_GetQuePointsByQuizId_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -486,15 +472,6 @@
                 <ScalarProperty Name="ScoreLastMarked" ColumnName="ScoreLastMarked" />
                 <ScalarProperty Name="OptionOrder" ColumnName="OptionOrder" />
                 <ScalarProperty Name="Feedback" ColumnName="Feedback" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="QZ_Video_GetAllSectionsQuestions" FunctionName="DBEntity.Store.QZ_Video_GetAllSectionsQuestions">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DBEntity.QZ_Video_GetAllSectionsQuestions_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="Question" ColumnName="Question" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

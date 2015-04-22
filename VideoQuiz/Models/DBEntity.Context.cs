@@ -34,15 +34,6 @@ namespace VideoQuiz.Models
         public virtual DbSet<QZQuestion> QZQuestion { get; set; }
         public virtual DbSet<QZSection> QZSection { get; set; }
     
-        public virtual int QZ_GetAllSectionsQuestionsForVideoQuiz(Nullable<int> quizID)
-        {
-            var quizIDParameter = quizID.HasValue ?
-                new ObjectParameter("quizID", quizID) :
-                new ObjectParameter("quizID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QZ_GetAllSectionsQuestionsForVideoQuiz", quizIDParameter);
-        }
-    
         public virtual ObjectResult<QZ_GetAnswer_MCH_Result> QZ_GetAnswer_MCH(Nullable<int> questionID)
         {
             var questionIDParameter = questionID.HasValue ?
@@ -59,15 +50,6 @@ namespace VideoQuiz.Models
                 new ObjectParameter("quizID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QZ_Video_GetCuepointsByQuizId", quizIDParameter);
-        }
-    
-        public virtual ObjectResult<QZ_Video_GetAllSectionsQuestions_Result> QZ_Video_GetAllSectionsQuestions(Nullable<int> quizID)
-        {
-            var quizIDParameter = quizID.HasValue ?
-                new ObjectParameter("quizID", quizID) :
-                new ObjectParameter("quizID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_Video_GetAllSectionsQuestions_Result>("QZ_Video_GetAllSectionsQuestions", quizIDParameter);
         }
     
         public virtual ObjectResult<QZ_Video_GetQuePointsByQuizId_Result> QZ_Video_GetQuePointsByQuizId(Nullable<int> quizID)
