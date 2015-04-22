@@ -141,6 +141,15 @@
           <Property Name="QuizID" Type="int" Nullable="false" />
           <Property Name="LOID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="QZVideoQuizQuePoint">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuizID" Type="int" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="QuePoint" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_QZAnswer_MCH_QZQuestion">
           <End Role="QZQuestion" Type="Self.QZQuestion" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -211,6 +220,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_QZVideoQuizQuePoint_QZQuestion">
+          <End Role="QZQuestion" Type="Self.QZQuestion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QZVideoQuizQuePoint" Type="Self.QZVideoQuizQuePoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuestion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZVideoQuizQuePoint">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="QZ_Video_GetQuePointsByQuizId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="quizID" Type="int" Mode="In" />
         </Function>
@@ -222,6 +245,7 @@
           <EntitySet Name="QZResult" EntityType="Self.QZResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZSection" EntityType="Self.QZSection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QZVideoQuizQuePoint" EntityType="Self.QZVideoQuizQuePoint" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_QZAnswer_MCH_QZQuestion" Association="Self.FK_QZAnswer_MCH_QZQuestion">
             <End Role="QZQuestion" EntitySet="QZQuestion" />
             <End Role="QZAnswer_MCH" EntitySet="QZAnswer_MCH" />
@@ -241,6 +265,10 @@
           <AssociationSet Name="FK_QZVideoQuizAttachement_QZQuiz" Association="Self.FK_QZVideoQuizAttachement_QZQuiz">
             <End Role="QZQuiz" EntitySet="QZQuiz" />
             <End Role="QZVideoQuizAttachement" EntitySet="QZVideoQuizAttachement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QZVideoQuizQuePoint_QZQuestion" Association="Self.FK_QZVideoQuizQuePoint_QZQuestion">
+            <End Role="QZQuestion" EntitySet="QZQuestion" />
+            <End Role="QZVideoQuizQuePoint" EntitySet="QZVideoQuizQuePoint" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -280,6 +308,11 @@
           <AssociationSet Name="FK_QZAnswer_MCH_QZQuestion" Association="DBEntity.FK_QZAnswer_MCH_QZQuestion">
             <End Role="QZQuestion" EntitySet="QZQuestion" />
             <End Role="QZAnswer_MCH" EntitySet="QZAnswer_MCH" />
+          </AssociationSet>
+          <EntitySet Name="QZVideoQuizQuePoint" EntityType="DBEntity.QZVideoQuizQuePoint" />
+          <AssociationSet Name="FK_QZVideoQuizQuePoint_QZQuestion" Association="DBEntity.FK_QZVideoQuizQuePoint_QZQuestion">
+            <End Role="QZQuestion" EntitySet="QZQuestion" />
+            <End Role="QZVideoQuizQuePoint" EntitySet="QZVideoQuizQuePoint" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="QZ_Video_GetQuePointsByQuizId_Result">
@@ -432,6 +465,7 @@
           <Property Name="ImgRationale" Type="Int32" Nullable="false" />
           <NavigationProperty Name="QZSection" Relationship="DBEntity.FK_QZQuestion_QZSection" FromRole="QZQuestion" ToRole="QZSection" />
           <NavigationProperty Name="QZAnswer_MCH" Relationship="DBEntity.FK_QZAnswer_MCH_QZQuestion" FromRole="QZQuestion" ToRole="QZAnswer_MCH" />
+          <NavigationProperty Name="QZVideoQuizQuePoint" Relationship="DBEntity.FK_QZVideoQuizQuePoint_QZQuestion" FromRole="QZQuestion" ToRole="QZVideoQuizQuePoint" />
         </EntityType>
         <EntityType Name="QZSection">
           <Key>
@@ -499,6 +533,30 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="QZAnswer_MCH">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="QZVideoQuizQuePoint">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuizID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="QuePoint" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QZQuestion" Relationship="DBEntity.FK_QZVideoQuizQuePoint_QZQuestion" FromRole="QZVideoQuizQuePoint" ToRole="QZQuestion" />
+        </EntityType>
+        <Association Name="FK_QZVideoQuizQuePoint_QZQuestion">
+          <End Type="DBEntity.QZQuestion" Role="QZQuestion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBEntity.QZVideoQuizQuePoint" Role="QZVideoQuizQuePoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuestion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZVideoQuizQuePoint">
               <PropertyRef Name="QuestionID" />
             </Dependent>
           </ReferentialConstraint>
@@ -659,6 +717,16 @@
                 <ScalarProperty Name="IsAnswer" ColumnName="IsAnswer" />
                 <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QZVideoQuizQuePoint">
+            <EntityTypeMapping TypeName="DBEntity.QZVideoQuizQuePoint">
+              <MappingFragment StoreEntitySet="QZVideoQuizQuePoint">
+                <ScalarProperty Name="QuePoint" ColumnName="QuePoint" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuizID" ColumnName="QuizID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -34,6 +34,7 @@ namespace VideoQuiz.Models
         public virtual DbSet<QZQuestion> QZQuestion { get; set; }
         public virtual DbSet<QZSection> QZSection { get; set; }
         public virtual DbSet<QZAnswer_MCH> QZAnswer_MCH { get; set; }
+        public virtual DbSet<QZVideoQuizQuePoint> QZVideoQuizQuePoint { get; set; }
     
         public virtual int QZ_Video_GetCuepointsByQuizId(Nullable<int> quizID)
         {
