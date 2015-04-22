@@ -14,6 +14,11 @@ namespace VideoQuiz.Models
     
     public partial class QZQuestion
     {
+        public QZQuestion()
+        {
+            this.QZAnswer_MCH = new HashSet<QZAnswer_MCH>();
+        }
+    
         public int ID { get; set; }
         public int TypeID { get; set; }
         public int SectionID { get; set; }
@@ -31,5 +36,6 @@ namespace VideoQuiz.Models
         public int ImgRationale { get; set; }
     
         public virtual QZSection QZSection { get; set; }
+        public virtual ICollection<QZAnswer_MCH> QZAnswer_MCH { get; set; }
     }
 }

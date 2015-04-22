@@ -27,6 +27,20 @@
           <Property Name="DateTimeCreated" Type="datetime" />
           <Property Name="DateTimeModified" Type="datetime" />
         </EntityType>
+        <EntityType Name="QZAnswer_MCH">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="AnswerText" Type="nvarchar(max)" />
+          <Property Name="IsAnswer" Type="bit" Nullable="false" />
+          <Property Name="IsAnswerLastMarked" Type="bit" />
+          <Property Name="Score" Type="float" Nullable="false" />
+          <Property Name="ScoreLastMarked" Type="float" />
+          <Property Name="OptionOrder" Type="int" />
+          <Property Name="Feedback" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="QZQuestion">
           <Key>
             <PropertyRef Name="ID" />
@@ -127,6 +141,20 @@
           <Property Name="QuizID" Type="int" Nullable="false" />
           <Property Name="LOID" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_QZAnswer_MCH_QZQuestion">
+          <End Role="QZQuestion" Type="Self.QZQuestion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="QZAnswer_MCH" Type="Self.QZAnswer_MCH" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuestion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZAnswer_MCH">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_QZQuestion_QZSection">
           <End Role="QZSection" Type="Self.QZSection" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -183,19 +211,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="QZ_GetAnswer_MCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="questionID" Type="int" Mode="In" />
-        </Function>
         <Function Name="QZ_Video_GetQuePointsByQuizId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="quizID" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="DBEntityStoreContainer">
           <EntitySet Name="LOResource" EntityType="Self.LOResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QZAnswer_MCH" EntityType="Self.QZAnswer_MCH" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZQuestion" EntityType="Self.QZQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZQuiz" EntityType="Self.QZQuiz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZResult" EntityType="Self.QZResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZSection" EntityType="Self.QZSection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QZVideoQuizAttachement" EntityType="Self.QZVideoQuizAttachement" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_QZAnswer_MCH_QZQuestion" Association="Self.FK_QZAnswer_MCH_QZQuestion">
+            <End Role="QZQuestion" EntitySet="QZQuestion" />
+            <End Role="QZAnswer_MCH" EntitySet="QZAnswer_MCH" />
+          </AssociationSet>
           <AssociationSet Name="FK_QZQuestion_QZSection" Association="Self.FK_QZQuestion_QZSection">
             <End Role="QZSection" EntitySet="QZSection" />
             <End Role="QZQuestion" EntitySet="QZQuestion" />
@@ -218,9 +248,6 @@
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBEntity" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="DBEntityContainer" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="QZ_GetAnswer_MCH" ReturnType="Collection(DBEntity.QZ_GetAnswer_MCH_Result)">
-          <Parameter Name="questionID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="QZ_Video_GetCuepointsByQuizId">
           <Parameter Name="quizID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -249,18 +276,12 @@
             <End Role="QZQuiz" EntitySet="QZQuiz" />
             <End Role="QZSection" EntitySet="QZSection" />
           </AssociationSet>
+          <EntitySet Name="QZAnswer_MCH" EntityType="DBEntity.QZAnswer_MCH" />
+          <AssociationSet Name="FK_QZAnswer_MCH_QZQuestion" Association="DBEntity.FK_QZAnswer_MCH_QZQuestion">
+            <End Role="QZQuestion" EntitySet="QZQuestion" />
+            <End Role="QZAnswer_MCH" EntitySet="QZAnswer_MCH" />
+          </AssociationSet>
         </EntityContainer>
-        <ComplexType Name="QZ_GetAnswer_MCH_Result">
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="QuestionID" Nullable="false" />
-          <Property Type="String" Name="AnswerText" Nullable="true" />
-          <Property Type="Boolean" Name="IsAnswer" Nullable="false" />
-          <Property Type="Boolean" Name="IsAnswerLastMarked" Nullable="true" />
-          <Property Type="Double" Name="Score" Nullable="false" />
-          <Property Type="Double" Name="ScoreLastMarked" Nullable="true" />
-          <Property Type="Int32" Name="OptionOrder" Nullable="true" />
-          <Property Type="String" Name="Feedback" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="QZ_Video_GetQuePointsByQuizId_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="Int32" Name="QuestionID" Nullable="false" />
@@ -410,6 +431,7 @@
           <Property Name="OptRationale" Type="Boolean" Nullable="false" />
           <Property Name="ImgRationale" Type="Int32" Nullable="false" />
           <NavigationProperty Name="QZSection" Relationship="DBEntity.FK_QZQuestion_QZSection" FromRole="QZQuestion" ToRole="QZSection" />
+          <NavigationProperty Name="QZAnswer_MCH" Relationship="DBEntity.FK_QZAnswer_MCH_QZQuestion" FromRole="QZQuestion" ToRole="QZAnswer_MCH" />
         </EntityType>
         <EntityType Name="QZSection">
           <Key>
@@ -452,6 +474,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="QZAnswer_MCH">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="AnswerText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsAnswer" Type="Boolean" Nullable="false" />
+          <Property Name="IsAnswerLastMarked" Type="Boolean" />
+          <Property Name="Score" Type="Double" Nullable="false" />
+          <Property Name="ScoreLastMarked" Type="Double" />
+          <Property Name="OptionOrder" Type="Int32" />
+          <Property Name="Feedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QZQuestion" Relationship="DBEntity.FK_QZAnswer_MCH_QZQuestion" FromRole="QZAnswer_MCH" ToRole="QZQuestion" />
+        </EntityType>
+        <Association Name="FK_QZAnswer_MCH_QZQuestion">
+          <End Type="DBEntity.QZQuestion" Role="QZQuestion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBEntity.QZAnswer_MCH" Role="QZAnswer_MCH" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QZQuestion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="QZAnswer_MCH">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -460,21 +511,6 @@
         <Alias Key="Model" Value="DBEntity" />
         <Alias Key="Target" Value="DBEntity.Store" />
         <EntityContainerMapping CdmEntityContainer="DBEntityContainer" StorageEntityContainer="DBEntityStoreContainer">
-          <FunctionImportMapping FunctionImportName="QZ_GetAnswer_MCH" FunctionName="DBEntity.Store.QZ_GetAnswer_MCH">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DBEntity.QZ_GetAnswer_MCH_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-                <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
-                <ScalarProperty Name="IsAnswer" ColumnName="IsAnswer" />
-                <ScalarProperty Name="IsAnswerLastMarked" ColumnName="IsAnswerLastMarked" />
-                <ScalarProperty Name="Score" ColumnName="Score" />
-                <ScalarProperty Name="ScoreLastMarked" ColumnName="ScoreLastMarked" />
-                <ScalarProperty Name="OptionOrder" ColumnName="OptionOrder" />
-                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="QZ_Video_GetQuePointsByQuizId" FunctionName="DBEntity.Store.QZ_Video_GetQuePointsByQuizId">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DBEntity.QZ_Video_GetQuePointsByQuizId_Result">
@@ -608,6 +644,21 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="QuizID" ColumnName="QuizID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QZAnswer_MCH">
+            <EntityTypeMapping TypeName="DBEntity.QZAnswer_MCH">
+              <MappingFragment StoreEntitySet="QZAnswer_MCH">
+                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
+                <ScalarProperty Name="OptionOrder" ColumnName="OptionOrder" />
+                <ScalarProperty Name="ScoreLastMarked" ColumnName="ScoreLastMarked" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="IsAnswerLastMarked" ColumnName="IsAnswerLastMarked" />
+                <ScalarProperty Name="IsAnswer" ColumnName="IsAnswer" />
+                <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

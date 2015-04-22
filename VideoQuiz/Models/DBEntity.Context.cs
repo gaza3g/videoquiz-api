@@ -33,15 +33,7 @@ namespace VideoQuiz.Models
         public virtual DbSet<QZQuiz> QZQuiz { get; set; }
         public virtual DbSet<QZQuestion> QZQuestion { get; set; }
         public virtual DbSet<QZSection> QZSection { get; set; }
-    
-        public virtual ObjectResult<QZ_GetAnswer_MCH_Result> QZ_GetAnswer_MCH(Nullable<int> questionID)
-        {
-            var questionIDParameter = questionID.HasValue ?
-                new ObjectParameter("questionID", questionID) :
-                new ObjectParameter("questionID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<QZ_GetAnswer_MCH_Result>("QZ_GetAnswer_MCH", questionIDParameter);
-        }
+        public virtual DbSet<QZAnswer_MCH> QZAnswer_MCH { get; set; }
     
         public virtual int QZ_Video_GetCuepointsByQuizId(Nullable<int> quizID)
         {

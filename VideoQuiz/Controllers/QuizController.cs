@@ -221,7 +221,13 @@ namespace VideoQuiz.Controllers
 
             using (DBEntityContainer db = GetDB(instance))
             {
-                var result = db.QZ_GetAnswer_MCH(questionId).ToList();
+
+                /* Get all options for a particular question */
+                var result = from m in db.QZAnswer_MCH
+                             where m.QuestionID == questionId
+                             orderby m.OptionOrder
+                             select m;
+                             
 
                 foreach (var item in result.ToList())
                 {
